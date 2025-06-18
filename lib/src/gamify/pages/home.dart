@@ -145,9 +145,7 @@ class TopLayerWidget extends StatelessWidget {
         vertical: screenWidth * 0.10,
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const TopBarWidget(),
           FeaturedGameInfoWidget(
@@ -155,9 +153,30 @@ class TopLayerWidget extends StatelessWidget {
             screenHeight: screenHeight,
             screenWidth: screenWidth,
           ),
-          ScrollableGamesWidget(
-            screenHeight: screenHeight,
-            screenWidth: screenWidth,
+          SizedBox(height: 10), // spacing
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ScrollableGamesWidget(
+                    screenHeight: screenHeight,
+                    screenWidth: screenWidth,
+                    topPadding: screenHeight * 0.08,
+                    dataProvider: games,
+                  ),
+                  HorizontalImageWidget(
+                    screenHeight: screenHeight,
+                    screenWidth: screenWidth,
+                  ),
+                  ScrollableGamesWidget(
+                    screenHeight: screenHeight,
+                    topPadding: screenHeight * 0.04,
+                    screenWidth: screenWidth,
+                    dataProvider: featuredGames,
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -245,10 +264,13 @@ class FeaturedGameInfoWidget extends StatelessWidget {
 class ScrollableGamesWidget extends StatelessWidget {
   final double screenHeight;
   final double screenWidth;
+  final double topPadding;
+  final List dataProvider;
+
   const ScrollableGamesWidget({
     super.key,
     required this.screenHeight,
-    required this.screenWidth,
+    required this.screenWidth, required this.topPadding, required this.dataProvider,
   });
 
   @override
@@ -257,25 +279,31 @@ class ScrollableGamesWidget extends StatelessWidget {
       height: screenHeight * 0.30,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: games.length,
+        itemCount: dataProvider.length,
         itemBuilder: (context, index) {
           return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
                 height: screenHeight * 0.15,
                 width: screenWidth * 0.30,
-                margin: EdgeInsets.only(right: 10.0),
+                margin: EdgeInsets.only(right: 10.0, top: topPadding),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
-                  color: Colors.amber,
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(dataProvider[index].coverImage.url),
+                  ),
                 ),
-                child: Image.network(
-                  games[index].images != null
-                      ? games[index].images![0].url
-                      : "",
+              ),
+              SizedBox(
+                width: screenWidth * 0.30,
+                child: Text(
+                  dataProvider[index].title,
+                  maxLines: 3,
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
             ],
@@ -285,3 +313,26 @@ class ScrollableGamesWidget extends StatelessWidget {
     );
   }
 }
+
+class HorizontalImageWidget extends StatelessWidget {
+  final double screenHeight;
+  final double screenWidth;
+  const HorizontalImageWidget({super.key, required this.screenHeight, required this.screenWidth});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: screenHeight * 0.12,
+      width: screenWidth,
+      decoration: BoxDecoration(
+        color: Colors.amber,
+        borderRadius: BorderRadius.circular(10.0),
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: NetworkImage(featuredGames[2].coverImage.url),
+        ),
+      ),
+    );
+  }
+}
+

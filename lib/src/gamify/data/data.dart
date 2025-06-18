@@ -43,15 +43,6 @@ List<Game> games = [
     "",
     "Massive Entertainment",
   ),
-  Game(
-    "Resident Evil 2",
-    GameImage(
-      "https://media.playstation.com/is/image/SCEA/resident-evil-2-box-art-01-ps4-us-12dec18?\$native_nt\$",
-      "",
-    ),
-    "",
-    "Capcom",
-  ),
 ];
 
 List<Game> games2 = [
