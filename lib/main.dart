@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gamezone/src/gamify/pages/home.dart';
+import 'package:gamezone/src/authify/pages/login_page.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark
       ),
-      home: const HomePage(),
+      home: LoginPage(),
     );
   }
 }
